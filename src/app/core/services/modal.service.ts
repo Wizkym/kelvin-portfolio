@@ -14,8 +14,8 @@ export class ModalService {
   }
 
   close(): void {
-    this.activeModal.set(null);
     this.overlayState.set('animate-down');
+    setTimeout(() => this.activeModal.set(null), 350);
     setTimeout(() => this.overlayState.set('idle'), 1000);
   }
 }
