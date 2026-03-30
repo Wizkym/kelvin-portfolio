@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Kelvin Portfolio — Contact Form API
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+  ContactApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - 'https://thek2mundy.com'
+          - 'http://localhost:4200'
+        AllowMethods:
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+
+  ContactFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/handler.handler
+      CodeUri: .
+      Description: Sends contact form emails via SES
+      Environment:
+        Variables:
+          RECIPIENT_EMAIL: kevkmundy@gmail.com
+          SENDER_EMAIL: !Ref SenderEmail
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: ses:SendEmail
+              Resource: !Sub 'arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/*'
+      Events:
+        Send:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ContactApi
+            Path: /send
+            Method: POST
+
+Parameters:
+  SenderEmail:
+    Type: String
+    Description: SES-verified sender email address (e.g. no-reply@thek2mundy.com)
+
+Outputs:
+  ApiUrl:
+    Description: Contact API endpoint — paste this into environment.prod.ts
+    Value: !Sub 'https://${ContactApi}.execute-api.${AWS::Region}.amazonaws.com/send'
