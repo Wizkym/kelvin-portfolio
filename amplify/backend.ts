@@ -11,7 +11,7 @@ const apiStack = backend.createStack('ContactApiStack');
 
 const httpApi = new HttpApi(apiStack, 'ContactApi', {
   corsPreflight: {
-    allowOrigins: ['https://thek2mundy.com', 'http://localhost:4200'],
+    allowOrigins: ['https://thek2mundy.com', 'https://www.thek2mundy.com', 'http://localhost:4200'],
     allowMethods: [CorsHttpMethod.POST, CorsHttpMethod.OPTIONS],
     allowHeaders: ['Content-Type'],
   },

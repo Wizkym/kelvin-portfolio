@@ -39,6 +39,9 @@ testem.log
 /typings
 __screenshots__/
 
+# Amplify local build artifacts
+.amplify/
+
 # System files
 .DS_Store
 Thumbs.db
