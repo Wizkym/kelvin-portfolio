@@ -16,7 +16,7 @@ function respond(statusCode: number, status: 'ok' | 'error'): APIGatewayProxyRes
   return { statusCode, headers: corsHeaders, body: JSON.stringify({ status }) };
 }
 
-export async function handler(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> {
+export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   let body: { name?: string; email?: string; subject?: string; message?: string };
 
   try {
@@ -52,4 +52,4 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
     console.error('SES error:', err);
     return respond(500, 'error');
   }
-}
+};

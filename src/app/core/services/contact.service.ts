@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import outputs from '../../../../amplify_outputs.json';
 
 export interface ContactPayload {
   name: string;
@@ -19,6 +19,6 @@ export class ContactService {
   private http = inject(HttpClient);
 
   sendMessage(payload: ContactPayload): Observable<ContactResponse> {
-    return this.http.post<ContactResponse>(environment.apiUrl, payload);
+    return this.http.post<ContactResponse>(outputs.custom.contactApiUrl, payload);
   }
 }
