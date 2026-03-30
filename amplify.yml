@@ -3,6 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
+        - node -e "const fs=require('fs'); const o=JSON.parse(fs.readFileSync('amplify_outputs.json')); o.custom.contactApiUrl=process.env.CONTACT_API_URL; fs.writeFileSync('amplify_outputs.json', JSON.stringify(o, null, 2));"
         - npm install
     build:
       commands:

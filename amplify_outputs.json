@@ -1,6 +1,6 @@
 {
-  "version": "1.3",
+  "version": "1.4",
   "custom": {
-    "contactApiUrl": "http://127.0.0.1:3000/send"
+    "contactApiUrl": "https://qtb2u9pu51.execute-api.us-east-1.amazonaws.com/send"
   }
 }
