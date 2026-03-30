@@ -1,0 +1,424 @@
+{
+ "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"AmplifySandbox\",\"createdWith\":\"1.22.0\",\"stackType\":\"custom\",\"metadata\":{}}",
+ "Resources": {
+  "ContactApi2DD5FE99": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowHeaders": [
+      "Content-Type"
+     ],
+     "AllowMethods": [
+      "POST",
+      "OPTIONS"
+     ],
+     "AllowOrigins": [
+      "https://thek2mundy.com",
+      "http://localhost:4200"
+     ]
+    },
+    "Name": "ContactApi",
+    "ProtocolType": "HTTP",
+    "Tags": {
+     "amplify:deployment-type": "sandbox",
+     "created-by": "amplify"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-kelvinportfolio-kelvinmundi-sandbox-a3c6a14a34/ContactApiStack/ContactApi/Resource"
+   }
+  },
+  "ContactApiDefaultStage06C7B474": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ContactApi2DD5FE99"
+    },
+    "AutoDeploy": true,
+    "StageName": "$default",
+    "Tags": {
+     "amplify:deployment-type": "sandbox",
+     "created-by": "amplify"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-kelvinportfolio-kelvinmundi-sandbox-a3c6a14a34/ContactApiStack/ContactApi/DefaultStage/Resource"
+   }
+  },
+  "ContactApiPOSTsendSendContactIntegration75291637": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ContactApi2DD5FE99"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Ref": "referencetoamplifykelvinportfoliokelvinmundisandboxa3c6a14a34functionNestedStackfunctionNestedStackResourceCC2FE480Outputsamplifykelvinportfoliokelvinmundisandboxa3c6a14a34functionsendcontactlambda7CD9DCD2Arn"
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-kelvinportfolio-kelvinmundi-sandbox-a3c6a14a34/ContactApiStack/ContactApi/POST--send/SendContactIntegration/Resource"
+   }
+  },
+  "ContactApiPOSTsendSendContactIntegrationPermissionE2A38E45": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Ref": "referencetoamplifykelvinportfoliokelvinmundisandboxa3c6a14a34functionNestedStackfunctionNestedStackResourceCC2FE480Outputsamplifykelvinportfoliokelvinmundisandboxa3c6a14a34functionsendcontactlambda7CD9DCD2Arn"
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ContactApi2DD5FE99"
+       },
+       "/*/*/send"
+      ]
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-kelvinportfolio-kelvinmundi-sandbox-a3c6a14a34/ContactApiStack/ContactApi/POST--send/SendContactIntegration-Permission"
+   }
+  },
+  "ContactApiPOSTsend8C0DE414": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "ContactApi2DD5FE99"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "POST /send",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "ContactApiPOSTsendSendContactIntegration75291637"
+       }
+      ]
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-kelvinportfolio-kelvinmundi-sandbox-a3c6a14a34/ContactApiStack/ContactApi/POST--send/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12Kyw6CMBBFv4V9GbFRE5eGjW6MgQ8wAx3I8GgJHSCG8O+msnN1zzm5GvTpDEmEi49L08YdF7A+yQuZXLBsFS7+veLANQot+Jk1rHeR4TawSisbJmguWFMIO4SUuUl2elihekRhZ8PlT3+/TXXYFwYhreyLxp69Z2e3TVlnCBp/mHUCxytcosYzx+NkhXuCbN8vPhmWKcUAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "amplify-kelvinportfolio-kelvinmundi-sandbox-a3c6a14a34/ContactApiStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "referencetoamplifykelvinportfoliokelvinmundisandboxa3c6a14a34functionNestedStackfunctionNestedStackResourceCC2FE480Outputsamplifykelvinportfoliokelvinmundisandboxa3c6a14a34functionsendcontactlambda7CD9DCD2Arn": {
+   "Type": "String"
+  }
+ },
+ "Outputs": {
+  "amplifykelvinportfoliokelvinmundisandboxa3c6a14a34ContactApiStackContactApiD0C4BE18Ref": {
+   "Value": {
+    "Ref": "ContactApi2DD5FE99"
+   }
+  }
+ }
+}
