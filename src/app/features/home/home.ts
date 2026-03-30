@@ -12,9 +12,9 @@ import { RotatingHeadline } from './rotating-headline/rotating-headline';
         <div class="row h-100 align-items-center justify-content-center text-center">
           <div class="col-12">
             <img class="home-img mb-4"
-                 src="img/botica.jpeg"
+                 src="img/atl-station.jpg"
                  alt="Kelvin Mundi profile photo"
-                 width="180" height="180">
+                 width="200" height="200">
             <div class="home-content">
               <h1 class="home-name">Kelvin <span class="color-scheme">Mundi</span></h1>
               <app-rotating-headline
@@ -37,11 +37,6 @@ import { RotatingHeadline } from './rotating-headline/rotating-headline';
             <li>
               <a href="https://github.com/Wizkym" target="_blank" rel="noopener" aria-label="GitHub">
                 <i class="icon ion-logo-github"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/kymosabe_/" target="_blank" rel="noopener" aria-label="Instagram">
-                <i class="icon ion-logo-instagram"></i>
               </a>
             </li>
           </ul>

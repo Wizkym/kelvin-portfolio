@@ -61,7 +61,7 @@ import { AgePipe } from '../../core/pipes/age.pipe';
               </address>
 
               <div class="d-flex align-items-center flex-wrap gap-3">
-                <a href="assets/resume.pdf" download class="btn button-main button-scheme content-download" aria-label="Download Resume">
+                <a href="assets/kelvin-mundi-resume.docx" download class="btn button-main button-scheme content-download" aria-label="Download Resume">
                   Download Resume
                 </a>
                 <ul class="content-follow list-unstyled">
@@ -73,11 +73,6 @@ import { AgePipe } from '../../core/pipes/age.pipe';
                   <li>
                     <a href="https://github.com/Wizkym" target="_blank" rel="noopener" aria-label="GitHub">
                       <i class="icon ion-logo-github"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.instagram.com/kymosabe_/" target="_blank" rel="noopener" aria-label="Instagram">
-                      <i class="icon ion-logo-instagram"></i>
                     </a>
                   </li>
                 </ul>
@@ -123,12 +118,12 @@ export class AboutModal {
     },
     {
       title: 'Mobile Apps',
-      icon: 'ion-phone-portrait-outline',
+      icon: 'ion-ios-phone-portrait',
       description: 'Cross-platform mobile solutions with responsive and accessible design.'
     },
     {
       title: 'Cloud Native',
-      icon: 'ion-cloud-outline',
+      icon: 'ion-ios-cloud-outline',
       description: 'Microservices, CI/CD pipelines, Docker, and cloud-first architectures.'
     }
   ];
