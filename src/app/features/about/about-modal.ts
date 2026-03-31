@@ -71,7 +71,7 @@ import { AgePipe } from '../../core/pipes/age.pipe';
                     </a>
                   </li>
                   <li>
-                    <a href="https://github.com/Wizkym" target="_blank" rel="noopener" aria-label="GitHub">
+                    <a href="https://github.com/mundy-kelvin" target="_blank" rel="noopener" aria-label="GitHub">
                       <i class="icon ion-logo-github"></i>
                     </a>
                   </li>
