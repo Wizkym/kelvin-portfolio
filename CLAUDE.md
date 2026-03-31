@@ -169,7 +169,7 @@ Two systems are loaded — they are NOT interchangeable:
 - **Personal info:** Name, Email (kevkmundy@gmail.com), Age (calculated from 1993/12/18), Location (Atlanta, GA, USA)
 - **Profile image:** `img/winery.jpeg`
 - **Resume:** Downloads `assets/resume.pdf`
-- **Social links:** LinkedIn (`linkedin.com/in/kelvin-mundi`), GitHub (`github.com/Wizkym`), Instagram (`instagram.com/kymosabe_/`)
+- **Social links:** LinkedIn (`linkedin.com/in/kelvin-mundi`), GitHub (`github.com/mundy-kelvin`), Instagram (`instagram.com/kymosabe_/`)
 - **Services:**
   1. Web Development (`ion-logo-html5`) — Angular, React, TypeScript
   2. Mobile Apps (`ion-ios-phone-portrait`) — Cross-platform mobile
