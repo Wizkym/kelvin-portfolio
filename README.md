@@ -1,59 +1,67 @@
-# KelvinPortfolio
+# Kelvin Mundi — Portfolio
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+Personal portfolio site for Kelvin Mundi, Senior Frontend Engineer specializing in Angular and enterprise financial applications. Live at [thek2mundy.com](https://www.thek2mundy.com).
 
-## Development server
+## Objectives
 
-To start a local development server, run:
+- Present professional background, skills, work history, and projects in a polished single-page experience
+- Provide a working contact form that delivers messages directly to the owner's inbox via AWS SES
+- Serve as a foundation for ongoing experimentation with Angular modernization and AI-assisted development
 
-```bash
-ng serve
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Angular 21 (standalone components, signals, reactive forms) |
+| Styling | SCSS + Bootstrap 5 grid |
+| Icons | IonIcons (legacy CSS font + v7 web components) |
+| Backend | AWS Lambda (Node.js 20, TypeScript) + API Gateway HTTP API |
+| Email | AWS SES via `@aws-sdk/client-ses` |
+| Infrastructure | AWS Amplify Gen 2 (CDK-based, defined in `amplify/backend.ts`) |
+| Hosting | AWS Amplify (CI/CD on push to `main`) |
+| Build | Vite via `@angular/build:application` |
+| Testing | Vitest |
+
+## Project Structure
+
+```
+amplify/
+  backend.ts                     CDK backend — HTTP API + SES IAM policy
+  functions/send-contact/
+    resource.ts                  defineFunction() — env vars
+    handler.ts                   Lambda handler — validates + sends email via SES
+src/
+  app/
+    core/                        Services, models, pipes
+    features/                    Page sections (home, about, resume, portfolio, contact)
+    layout/navbar/               Fixed navigation with modal triggers
+    shared/                      Preloader, overlay effect
+  styles.scss                    Global styles and design tokens
+amplify_outputs.json             Generated backend config (API URL)
+amplify.yml                      Amplify CI/CD build spec
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Local Development
 
 ```bash
-ng generate component component-name
+npm install
+npm start           # Angular dev server on http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Backend Deployment
+
+The backend (Lambda + API Gateway) is managed by AWS Amplify Gen 2. To deploy or update it:
 
 ```bash
-ng generate --help
+npx ampx sandbox --once   # Deploy to a personal AWS sandbox environment
 ```
 
-## Building
+After the first deploy, copy the output API URL into `amplify_outputs.json` and set `CONTACT_API_URL` as an environment variable in the Amplify console. Subsequent CI/CD builds inject it automatically via `amplify.yml`.
 
-To build the project run:
+## Production Build
 
 ```bash
-ng build
+npm run build       # Output in dist/kelvin-portfolio/browser/
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Deploys automatically on push to `main` via AWS Amplify CI/CD.

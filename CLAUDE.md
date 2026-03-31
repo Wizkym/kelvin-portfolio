@@ -20,6 +20,8 @@ Personal portfolio site for **Kelvin Mundi**, Senior Frontend Engineer specializ
 **Scripts:**
 - `npm start` → dev server
 - `npm run build` → production build
+- `npx ampx sandbox` → start local Amplify backend sandbox (deploys Lambda + API Gateway to AWS)
+- `npx ampx generate outputs` → regenerate `amplify_outputs.json` from deployed backend
 
 ---
 
@@ -75,6 +77,16 @@ public/
 ├── fonts/                              Local font files
 ├── img/                                Profile photo (winery.jpeg) + project screenshots
 └── ionicons.min.css                    Legacy icon font CSS
+
+amplify/
+├── backend.ts                          CDK infrastructure — HTTP API Gateway + Lambda + SES permissions
+└── functions/
+    └── send-contact/
+        ├── handler.ts                  Lambda handler — validates fields, sends email via SES
+        └── resource.ts                 Lambda resource definition — env vars (RECIPIENT_EMAIL, SENDER_EMAIL)
+
+amplify.yml                             Amplify build spec — injects CONTACT_API_URL, builds Angular app
+amplify_outputs.json                    Generated backend outputs — contains contactApiUrl consumed by ContactService
 ```
 
 ---
@@ -196,7 +208,7 @@ Two systems are loaded — they are NOT interchangeable:
 ### Contact Modal
 - Reactive form: Name, Email, Subject, Message (all required)
 - Submit states: idle → wait (gray) → success (green) / error (red) → auto-reset after 6s
-- Endpoint: POST `https://thek2mundy.com/send`
+- Endpoint: POST to Lambda via API Gateway — URL read from `amplify_outputs.json` (`custom.contactApiUrl`)
 - Right column info: Name, Email, Location (Atlanta GA), Phone (+1 404 789 9005)
 
 ---
@@ -207,10 +219,16 @@ Two systems are loaded — they are NOT interchangeable:
 |---|---|
 | `src/styles.scss` | All global + component styles in one file (~759 lines) |
 | `src/app/core/services/modal.service.ts` | Central state; drives all navigation |
+| `src/app/core/services/contact.service.ts` | Reads `amplify_outputs.json`, POSTs to Lambda endpoint |
 | `src/app/app.ts` | Root template; add any new top-level component here |
 | `src/index.html` | Icon scripts, fonts, meta tags live here |
 | `public/ionicons.min.css` | Source of truth for valid legacy icon class names |
 | `src/app/core/models/*.ts` | All static data (projects, resume, skills) lives here |
+| `amplify/backend.ts` | CDK stack — defines HTTP API Gateway, Lambda integration, SES IAM policy |
+| `amplify/functions/send-contact/handler.ts` | Lambda — validates payload, calls SES `SendEmailCommand` |
+| `amplify/functions/send-contact/resource.ts` | Lambda config — sets `RECIPIENT_EMAIL` / `SENDER_EMAIL` env vars |
+| `amplify_outputs.json` | Auto-generated — holds `custom.contactApiUrl`; must exist before `npm run build` |
+| `amplify.yml` | Amplify Hosting build spec — runs `npx ampx generate outputs` then Angular build |
 
 ---
 
@@ -222,3 +240,72 @@ Two systems are loaded — they are NOT interchangeable:
 - **Standalone only:** No NgModule exists. Every component declares its own `imports: []`.
 - **AgePipe is impure** (`pure: false`) — this is intentional so age recalculates on change detection cycles.
 - **CUSTOM_ELEMENTS_SCHEMA** is set on `app.ts` (root) — required for Ionicons v7 web component tags like `<ion-icon>` to avoid template errors.
+
+---
+
+## Amplify Backend — Email Infrastructure
+
+The contact form email pipeline is fully serverless via AWS Amplify Gen 2 (CDK-based).
+
+### Architecture
+
+```
+Contact Form (Angular)
+  → ContactService reads amplify_outputs.json → contactApiUrl
+  → HTTP POST to API Gateway (us-east-1)
+  → Lambda: send-contact
+  → AWS SES SendEmailCommand
+  → Email delivered to kevkmundy@gmail.com
+```
+
+### AWS Resources (CloudFormation stack: `ContactApiStack`)
+
+| Resource | Detail |
+|---|---|
+| HTTP API Gateway | `https://qtb2u9pu51.execute-api.us-east-1.amazonaws.com/send` |
+| Lambda function | `send-contact` (Node.js, TypeScript) |
+| SES sender | `no-reply@thek2mundy.com` (must be verified in SES) |
+| SES recipient | `kevkmundy@gmail.com` |
+
+### CORS Allowed Origins
+
+- `https://thek2mundy.com`
+- `https://www.thek2mundy.com`
+- `http://localhost:4200`
+
+### Lambda Environment Variables (`amplify/functions/send-contact/resource.ts`)
+
+| Variable | Value |
+|---|---|
+| `RECIPIENT_EMAIL` | `kevkmundy@gmail.com` |
+| `SENDER_EMAIL` | `no-reply@thek2mundy.com` |
+| `CORS_ORIGIN` | Optional override (defaults to `*`) |
+
+### Lambda Request/Response
+
+**POST body (JSON):**
+```json
+{ "name": "...", "email": "...", "subject": "...", "message": "..." }
+```
+All four fields are required — Lambda returns `400` if any are missing.
+
+**Success response:** `200 { "success": true, "message": "Email sent successfully" }`
+**Error response:** `500` with error detail
+
+### ContactService (`src/app/core/services/contact.service.ts`)
+
+- Reads `amplify_outputs.json` at runtime to get `contactApiUrl`
+- POSTs `ContactFormData` (`name`, `email`, `subject`, `message`) as JSON
+- Returns `Observable<ContactResponse>` — consumed by `contact-modal.ts`
+
+### Amplify Hosting Build (`amplify.yml`)
+
+The pre-build step injects `CONTACT_API_URL` from Amplify environment variables into `amplify_outputs.json`. This ensures the Angular build picks up the correct API URL per environment (staging vs production).
+
+### Local Development
+
+Run `npx ampx sandbox` to deploy a personal sandbox stack to AWS — this creates a live Lambda + API Gateway you can hit from `localhost:4200`. The sandbox writes a fresh `amplify_outputs.json` automatically.
+
+### SES Requirement
+
+`no-reply@thek2mundy.com` must be a **verified identity** in AWS SES (us-east-1). If SES is still in sandbox mode, `kevkmundy@gmail.com` must also be verified. Production use requires moving SES out of sandbox via AWS support request.
